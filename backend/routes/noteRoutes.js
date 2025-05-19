@@ -7,6 +7,14 @@ const Note = require('../models/Note');
 const { nanoid } = require('nanoid');
 
 
+// supabase client
+const { createClient } = require('@supabase/supabase-js');
+const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_KEY
+);
+
+
 // route to create a note
 router.post('/', async (req, res) => {
     const noteId = nanoid(8);
@@ -16,8 +24,9 @@ router.post('/', async (req, res) => {
         noteId,
         text,
         fileUrl,
+        filePath,
         hasBeenOpened: false,
-        deleteAfterMinutes: deleteAfterMinutes || 10
+        deleteAfterMinutes: deleteAfterMinutes || 5
     });
 
     // send note id to frontend
@@ -47,6 +56,35 @@ router.get('/:id', async (req, res) => {
 
     // send note data to frontend
     res.json(note);
+});
+
+
+// route to delete file from supabase & delete note
+router.delete('/:id', async (req, res) => {
+    try {
+        const note = await Note.findOne({ noteId: req.params.id });
+        if (!note) {
+            return res.status(404).json({ error: 'Note not found' });
+        }
+
+        // remove from supabase if has filepath
+        if (note.filePath) {
+            const { error: supaErr } = await supabase
+                .storage
+                .from('snapnotes')
+                .remove([note.filePath]);
+            if (supaErr) {
+                return res.status(500).json({ error: 'Error deleting file from Supabase:', supaErr });
+            }
+        }
+
+        // delete from mongodb
+        await Note.deleteOne({ noteId: req.params.id });
+        return res.json({ success: true });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Server error' });
+    }
 });
 
 

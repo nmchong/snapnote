@@ -16,17 +16,21 @@ export default function CreateNote() {
         setLoading(true);
 
         let fileUrl = null;
+        let filePath = null;
 
         // manage file upload of file selected (upload to Supabase)
         if (file) {
             const fileName = `${Date.now()}_${file.name}`;
-            const { data, error: uploadError } = await supabase
+            const { data: uploadData, error: uploadError } = await supabase
                 .storage
                 .from('snapnotes')
                 .upload(fileName, file);
             if (uploadError) {
+                setLoading(false);
                 return setError('File upload failed: ' + uploadError.message);
             }
+
+            filePath = uploadData.path;
 
             // signed url with expiration time
             const { data: urlData, error: urlError } = await supabase
@@ -45,14 +49,13 @@ export default function CreateNote() {
         const res = await fetch('http://localhost:5001/api/notes', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text, deleteAfterMinutes, fileUrl}),
+            body: JSON.stringify({ text, deleteAfterMinutes, fileUrl, filePath}),
         });
 
         if (!res.ok) {
             const err = await res.json();
-            return setError(err.error || 'Unknown API error');
             setLoading(false);
-            return;
+            return setError(err.error || 'Unknown API error');
         }
 
         const { noteId } = await res.json();

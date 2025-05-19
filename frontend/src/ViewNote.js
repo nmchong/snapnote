@@ -46,11 +46,28 @@ export default function ViewNote() {
         }, 1000);
         return () => clearInterval(interval);
     }, [secondsLeft]);
+
+    // delete on tab close
+    useEffect(() => {
+        if (!note) return;
+
+        const handleBeforeUnload = () => {
+            fetch(`http://localhost:5001/api/notes/${id}`, {
+                method: "DELETE",
+                keepalive: true,
+            });
+        };
+
+        window.addEventListener("beforeunload", handleBeforeUnload);
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+        };
+    }, [id, note]);
     
 
     const container = "min-h-screen flex items-center justify-center bg-gray-100 p-6";
-    const card      = "bg-white rounded-xl shadow-lg p-8 max-w-md w-full space-y-6";
-    const title     = "text-2xl font-bold text-gray-800 text-center";
+    const card = "bg-white rounded-xl shadow-lg p-8 max-w-md w-full space-y-6";
+    const title = "text-2xl font-bold text-gray-800 text-center";
 
     if (error) {
         return (
@@ -58,7 +75,7 @@ export default function ViewNote() {
             <div className={card}>
             <p className="text-red-500 text-center">{error}</p>
             <Link to="/" className="block text-indigo-500 hover:underline text-center cursor-pointer">
-                ← Create a new SnapNote
+                Create a your own SnapNote
             </Link>
             </div>
         </div>
