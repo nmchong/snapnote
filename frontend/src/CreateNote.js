@@ -8,10 +8,12 @@ export default function CreateNote() {
     const [deleteAfterMinutes, setDeleteAfterMinutes] = useState(5);
     const [file, setFile] = useState(null);
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     async function handleSubmit(e) {
         e.preventDefault();
         setError('');
+        setLoading(true);
 
         let fileUrl = null;
 
@@ -49,11 +51,14 @@ export default function CreateNote() {
         if (!res.ok) {
             const err = await res.json();
             return setError(err.error || 'Unknown API error');
+            setLoading(false);
+            return;
         }
 
         const { noteId } = await res.json();
         setNoteId(noteId);
         setCreated(true);
+        setLoading(false);
     }
 
 
@@ -65,7 +70,7 @@ export default function CreateNote() {
         return (
             <div className={`${containerBg} min-h-screen flex items-center justify-center p-6`}>
                 <div className="max-w-md w-full p-8 rounded-xl shadow-lg text-center">
-                <h2 className="text-2xl font-semibold mb-4 text-gray-800">🎉 Note Created!</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-gray-800">Note Created!</h2>
                 {error && <p className="text-red-500 mb-2">{error}</p>}
                 <p className="mb-2">Your one-time link:</p>
                 <a
@@ -114,7 +119,7 @@ export default function CreateNote() {
             {/* note text */}
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                Your secret note
+                Your secret note <span className="text-gray-400">(required)</span>
                 </label>
                 <textarea
                 rows={6}
@@ -145,14 +150,18 @@ export default function CreateNote() {
             {/* submit button */}
             <button
                 type="submit"
-                disabled={!text}
-                className={`w-full py-2 text-white font-semibold rounded-lg
-                            transition-colors duration-200
-                            ${text
-                            ? 'bg-indigo-600 hover:bg-indigo-700 cursor-pointer'
-                            : 'bg-indigo-300 cursor-not-allowed'}`}
+                disabled={loading || !text}
+                className={`
+                w-full py-2 text-white font-semibold rounded-lg
+                transition-colors duration-200
+                ${text
+                ? (loading
+                    ? 'bg-indigo-500 cursor-wait'
+                    : 'bg-indigo-600 hover:bg-indigo-700 cursor-pointer')
+                : 'bg-indigo-300 cursor-not-allowed'}
+            `}
             >
-                Create Note
+                {loading ? 'Creating…' : 'Create Note'}
             </button>
             </form>
         </div>
