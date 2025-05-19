@@ -47,23 +47,17 @@ export default function ViewNote() {
         return () => clearInterval(interval);
     }, [secondsLeft]);
 
-    // delete on tab close
-    useEffect(() => {
-        if (!note) return;
 
-        const handleBeforeUnload = () => {
+    // delete note from backend
+    useEffect(() => {
+        return() => {
             fetch(`http://localhost:5001/api/notes/${id}`, {
                 method: "DELETE",
-                keepalive: true,
+                keepalive: true
             });
         };
+    }, [id]);
 
-        window.addEventListener("beforeunload", handleBeforeUnload);
-        return () => {
-            window.removeEventListener("beforeunload", handleBeforeUnload);
-        };
-    }, [id, note]);
-    
 
     const container = "min-h-screen flex items-center justify-center bg-gray-100 p-6";
     const card = "bg-white rounded-xl shadow-lg p-8 max-w-md w-full space-y-6";
@@ -75,7 +69,7 @@ export default function ViewNote() {
             <div className={card}>
             <p className="text-red-500 text-center">{error}</p>
             <Link to="/" className="block text-indigo-500 hover:underline text-center cursor-pointer">
-                Create a your own SnapNote
+                Create your own SnapNote
             </Link>
             </div>
         </div>
@@ -96,7 +90,7 @@ export default function ViewNote() {
             <div className={card}>
                 <h1 className={title}>Your SnapNote</h1>
                 {secondsLeft != null && (
-                    <p classname="text-indigo-600 font-mono text-lg text-center">
+                    <p className="text-indigo-600 font-mono text-lg text-center">
                         Expires in {Math.floor(secondsLeft/60)}m {secondsLeft%60}s or when you exit the tab
                     </p>)}
                 <div className="border border-gray-300 rounded-lg p-4 whitespace-pre-wrap text-gray-800">

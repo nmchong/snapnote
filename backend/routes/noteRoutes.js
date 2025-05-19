@@ -18,7 +18,7 @@ const supabase = createClient(
 // route to create a note
 router.post('/', async (req, res) => {
     const noteId = nanoid(8);
-    const { text, fileUrl, deleteAfterMinutes } = req.body;
+    const { text, fileUrl, filePath, deleteAfterMinutes } = req.body;
 
     const note = await Note.create({
         noteId,
@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
     });
 
     // send note id to frontend
-    res.json({ noteId });
+    return res.json({ noteId });
 });
 
 
@@ -48,43 +48,35 @@ router.get('/:id', async (req, res) => {
     // mark note as opened
     note.hasBeenOpened = true;
     note.openedAt = new Date();
-
-    // schedule deletion from database
     note.expiresAt = new Date(Date.now() + (note.deleteAfterMinutes * 60 * 1000));
 
+    // send note to frontend
     await note.save();
-
-    // send note data to frontend
     res.json(note);
 });
 
 
 // route to delete file from supabase & delete note
 router.delete('/:id', async (req, res) => {
-    try {
-        const note = await Note.findOne({ noteId: req.params.id });
-        if (!note) {
-            return res.status(404).json({ error: 'Note not found' });
-        }
-
-        // remove from supabase if has filepath
-        if (note.filePath) {
-            const { error: supaErr } = await supabase
-                .storage
-                .from('snapnotes')
-                .remove([note.filePath]);
-            if (supaErr) {
-                return res.status(500).json({ error: 'Error deleting file from Supabase:', supaErr });
-            }
-        }
-
-        // delete from mongodb
-        await Note.deleteOne({ noteId: req.params.id });
-        return res.json({ success: true });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Server error' });
+    const note = await Note.findOne({ noteId: req.params.id })
+    if (!note) {
+        return res.status(404).json({ error: 'Note not found' });
     }
+
+    // remove from supabase if has filepath
+    if (note.filePath) {
+        const { data: removed, error: supaError } = await supabase
+            .storage
+            .from('snapnotes')
+            .remove([note.filePath]);
+        if (supaError) {
+            return res.status(500).json({ error: 'Error deleting file from Supabase:', detail: supaError.message });
+        }
+    }
+
+    // delete from mongodb
+    await Note.deleteOne({ noteId: req.params.id });
+    return res.json({ success: true });
 });
 
 
