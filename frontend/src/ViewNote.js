@@ -39,24 +39,32 @@ export default function ViewNote() {
             return;
         }
         if (secondsLeft <= 0) {
-            return setError('Note expired');
+            setError('Note expired');
+            fetch(`http://localhost:5001/api/notes/${id}`, {
+                method: "DELETE",
+                keepalive: true
+            });
+            return;
         }
         const interval = setInterval(() => {
             setSecondsLeft(prev => prev - 1);
         }, 1000);
         return () => clearInterval(interval);
-    }, [secondsLeft]);
+    }, [secondsLeft, id]);
 
 
-    // delete note from backend
+    // delete note from backend on tab close
     useEffect(() => {
-        return() => {
+    if (!note) return;
+        const before = () => {
             fetch(`http://localhost:5001/api/notes/${id}`, {
-                method: "DELETE",
-                keepalive: true
+                method: 'DELETE',
+                keepalive: true,
             });
         };
-    }, [id]);
+        window.addEventListener('beforeunload', before);
+        return () => window.removeEventListener('beforeunload', before);
+    }, [id, note]);
 
 
     const container = "min-h-screen flex items-center justify-center bg-gray-100 p-6";
