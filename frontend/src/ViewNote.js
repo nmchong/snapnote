@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 export default function ViewNote() {
     const { id } = useParams();
@@ -76,6 +76,8 @@ export default function ViewNote() {
     const card = "bg-white rounded-xl shadow-lg p-8 max-w-md w-full space-y-6";
     const title = "text-2xl font-bold text-gray-800 text-center";
 
+    const navigate = useNavigate();
+
     if (error) {
         return (
         <div className={container}>
@@ -134,10 +136,18 @@ export default function ViewNote() {
                     </div>
                 )}
 
-                <Link
-                    to="/"
-                    className="block text-center text-gray-500 hover:text-gray-700 hover:underline cursor-pointer"
-                >[ Create your own SnapNote ]</Link>
+                <button
+                    className="mt-6 block w-full text-center text-gray-500 hover:text-gray-700 hover:underline cursor-pointer"
+                    onClick={async () => {
+                        await fetch(`http://localhost:5001/api/notes/${id}`, {
+                            method: "DELETE",
+                            keepalive: true
+                        });
+                        navigate("/");
+                    }}
+                >
+                    [ Create your own SnapNote ]
+                </button>
             </div>
         </div>
     );
