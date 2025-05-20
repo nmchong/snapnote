@@ -117,24 +117,37 @@ export default function ViewNote() {
                 </div>
 
 
-                {note.fileUrl && (
-                    <div className="flex flex-col items-center space-y-1">
-                        {/* show the filename */}
-                        {note.fileName && (
-                            <span className="text-gray-700 text-sm">
-                                Attachment: {note.fileName}
-                            </span>
-                        )}
+                {note.fileUrl && note.fileName && (
+                    <>
                         <a
-                            href={note.fileUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-4 py-2 bg-indigo-100 text-indigo-800 rounded hover:bg-indigo-200 cursor-pointer"
+                        href={note.fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block w-full max-w-md mx-auto px-8 py-3 font-bold text-lg text-center bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-shadow shadow-lg"
                         >
-                            View attachment
+                        View attachment: {note.fileName}
                         </a>
-                    </div>
+
+                        {/* file preview */}
+                        <div className="mt-6 w-full max-w-md mx-auto">
+                        {/\.(jpe?g|png|gif|webp)$/i.test(note.fileName) && (
+                            <img
+                            src={note.fileUrl}
+                            alt={note.fileName}
+                            className="w-full rounded-lg shadow"
+                            />
+                        )}
+                        {/\.pdf$/i.test(note.fileName) && (
+                            <iframe
+                            src={note.fileUrl}
+                            title={note.fileName}
+                            className="w-full h-64 border rounded-lg"
+                            />
+                        )}
+                        </div>
+                    </>
                 )}
+
 
                 <button
                     className="mt-6 block w-full text-center text-gray-500 hover:text-gray-700 hover:underline cursor-pointer"

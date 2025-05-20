@@ -55,7 +55,13 @@ export default function CreateNote() {
         const res = await fetch('http://localhost:5001/api/notes', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text, deleteAfterMinutes, fileUrl, filePath, originalFileName, uploadFileNameOnDisk}),
+            body: JSON.stringify({
+                text,
+                deleteAfterMinutes,
+                fileUrl,
+                filePath,
+                fileName: originalFileName,
+                uploadFileNameOnDisk}),
         });
 
         if (!res.ok) {
