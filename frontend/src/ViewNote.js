@@ -77,7 +77,7 @@ export default function ViewNote() {
             <div className={card}>
             <p className="text-red-500 text-center">{error}</p>
             <Link to="/" className="block text-indigo-500 hover:underline text-center cursor-pointer">
-                Create your own SnapNote
+                [ Create your own SnapNote ]
             </Link>
             </div>
         </div>
@@ -96,7 +96,8 @@ export default function ViewNote() {
     return (
         <div className={container}>
             <div className={card}>
-                <h1 className={title}>Your SnapNote</h1>
+                <h1 className={title}>
+                    <span role="img" aria-label="paper">🗒️</span> Your SnapNote</h1>
                 {secondsLeft != null && (
                     <p className="text-indigo-600 font-mono text-lg text-center">
                         Expires in {Math.floor(secondsLeft/60)}m {secondsLeft%60}s or when you exit the tab
@@ -107,16 +108,28 @@ export default function ViewNote() {
 
 
                 {note.fileUrl && (
-                    <a
-                        href={note.fileUrl} download
-                        className="block text-center text-indigo-600 hover:underline cursor-pointer"
-                    >Download attachment</a>
+                    <div className="flex flex-col items-center space-y-1">
+                        {/* show the filename */}
+                        {note.fileName && (
+                            <span className="text-gray-700 text-sm">
+                                Attachment: {note.fileName}
+                            </span>
+                        )}
+                        <a
+                            href={note.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-4 py-2 bg-indigo-100 text-indigo-800 rounded hover:bg-indigo-200 cursor-pointer"
+                        >
+                            View attachment
+                        </a>
+                    </div>
                 )}
 
                 <Link
                     to="/"
                     className="block text-center text-gray-500 hover:text-gray-700 hover:underline cursor-pointer"
-                >← Create another SnapNote</Link>
+                >[ Create your own SnapNote ]</Link>
             </div>
         </div>
     );

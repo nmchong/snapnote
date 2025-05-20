@@ -9,22 +9,28 @@ export default function CreateNote() {
     const [file, setFile] = useState(null);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [copied, setCopied] = useState(false);
 
     async function handleSubmit(e) {
         e.preventDefault();
         setError('');
         setLoading(true);
+        setCopied(false);
 
         let fileUrl = null;
         let filePath = null;
+        let originalFileName = null;
+        let uploadFileNameOnDisk = null;
 
         // manage file upload of file selected (upload to Supabase)
         if (file) {
-            const fileName = `${Date.now()}_${file.name}`;
+            uploadFileNameOnDisk = `${Date.now()}_${file.name}`;
+            originalFileName = file.name;
+
             const { data: uploadData, error: uploadError } = await supabase
                 .storage
                 .from('snapnotes')
-                .upload(fileName, file);
+                .upload(uploadFileNameOnDisk, file);
             if (uploadError) {
                 setLoading(false);
                 return setError('File upload failed: ' + uploadError.message);
@@ -36,7 +42,7 @@ export default function CreateNote() {
             const { data: urlData, error: urlError } = await supabase
                 .storage
                 .from('snapnotes')
-                .createSignedUrl(fileName, deleteAfterMinutes * 60);
+                .createSignedUrl(uploadFileNameOnDisk, deleteAfterMinutes * 60);
 
             if (urlError) {
                 return setError('Could not generate download link');
@@ -49,7 +55,7 @@ export default function CreateNote() {
         const res = await fetch('http://localhost:5001/api/notes', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text, deleteAfterMinutes, fileUrl, filePath}),
+            body: JSON.stringify({ text, deleteAfterMinutes, fileUrl, filePath, originalFileName, uploadFileNameOnDisk}),
         });
 
         if (!res.ok) {
@@ -70,28 +76,45 @@ export default function CreateNote() {
     const primary = 'text-indigo-600';
 
     if (created) {
+        const link = `${window.location.origin}/notes/${noteId}`;
+
         return (
             <div className={`${containerBg} min-h-screen flex items-center justify-center p-6`}>
                 <div className="max-w-md w-full p-8 rounded-xl shadow-lg text-center">
-                <h2 className="text-2xl font-semibold mb-4 text-gray-800">Note Created!</h2>
-                {error && <p className="text-red-500 mb-2">{error}</p>}
-                <p className="mb-2">Your one-time link:</p>
-                <a
-                    className={`block break-words font-mono ${primary} hover:underline mb-4`}
-                    href={`http://localhost:3000/notes/${noteId}`}
-                >
-                    http://localhost:3000/notes/{noteId}
-                </a>
-                <p className="text-sm text-gray-600">
-                    (Click once to view & expire your note.)  
-                    <br/>
-                    <button
-                    className="mt-4 text-indigo-500 hover:underline cursor-pointer"
-                    onClick={() => window.location.reload()}
-                    >
-                    ← Create another SnapNote
-                    </button>
-                </p>
+                    <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+                        <span role="img" aria-label="celebration">🎉</span> Note Created!</h2>
+                    {error && <p className="text-red-500 mb-2">{error}</p>}
+                    <p className="mb-2">Your one-time link:</p>
+                    
+                    <div className="flex-col items-center justify-center space-y-4 mb-4">
+                        <a
+                            href={link}
+                            className={`block w-full text-center break-words font-mono ${primary} hover:underline`}
+                        >
+                            {link}
+                        </a>
+                        <button
+                            onClick={async () => {
+                            await navigator.clipboard.writeText(link);
+                            setCopied(true);
+                            setTimeout(() => setCopied(false), 2000);
+                            }}
+                            className="block w-full px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition"
+                        >
+                            {copied ? 'Copied!' : 'Copy Link'}
+                        </button>
+                    </div>
+
+                    <p className="text-sm text-gray-600">
+                        (This link can only be opened once and will self-destruct after viewing.)  
+                        <br/>
+                        <button
+                            className="mt-4 text-indigo-500 hover:underline cursor-pointer"
+                            onClick={() => window.location.reload()}
+                        >
+                            ← Create another SnapNote
+                        </button>
+                    </p>
                 </div>
             </div>
         );
@@ -100,14 +123,22 @@ export default function CreateNote() {
     return (
     <div className={`${containerBg} min-h-screen flex items-center justify-center p-6`}>
         <div className={`max-w-xl w-full ${cardBg} p-8 rounded-xl shadow-lg`}>
-            <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">Create a SnapNote</h1>
+            <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">
+                <span role="img" aria-label="pencil">✏️</span> Create a SnapNote</h1>
+            <p className="text-center text-gray-600 italic mb-6">
+                A Snapchat-inspired, one-time link that self-destructs after viewing.
+                Attach text and an optional file to be read once. 
+                A note expires after the specified time after being opened or when the note's tab is deleted.
+                All text and files are deleted after viewing.
+            </p>
+            
             {error && <p className="text-red-500 mb-4">{error}</p>}
 
             <form onSubmit={handleSubmit} className="space-y-4">
             {/* file upload */}
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                Attach a file <span className="text-gray-400">(optional)</span>
+                <span role="img" aria-label="file">📂</span> Attach a file <span className="text-gray-400">(optional)</span>
                 </label>
                 <input
                 type="file"
@@ -122,7 +153,7 @@ export default function CreateNote() {
             {/* note text */}
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                Your secret note <span className="text-gray-400">(required)</span>
+                <span role="img" aria-label="lock">🔒</span> Your secret note <span className="text-gray-400">(required)</span>
                 </label>
                 <textarea
                 rows={6}
@@ -137,7 +168,7 @@ export default function CreateNote() {
             {/* expiry time */}
             <div className="flex items-center space-x-2">
                 <label className="text-sm font-medium text-gray-700">
-                Expires after
+                    <span role="img" aria-label="clock">⏰</span> Expires
                 </label>
                 <input
                 type="number"
@@ -147,7 +178,7 @@ export default function CreateNote() {
                 onChange={e => setDeleteAfterMinutes(e.target.value)}
                 className="w-20 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300"
                 />
-                <span className="text-sm text-gray-600">minutes</span>
+                <span className="text-sm text-gray-600">minutes after opening</span>
             </div>
 
             {/* submit button */}

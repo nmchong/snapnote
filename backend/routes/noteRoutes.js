@@ -18,13 +18,14 @@ const supabase = createClient(
 // route to create a note
 router.post('/', async (req, res) => {
     const noteId = nanoid(8);
-    const { text, fileUrl, filePath, deleteAfterMinutes } = req.body;
+    const { text, fileUrl, filePath, fileName, deleteAfterMinutes } = req.body;
 
     const note = await Note.create({
         noteId,
         text,
         fileUrl,
         filePath,
+        fileName,
         hasBeenOpened: false,
         deleteAfterMinutes: deleteAfterMinutes || 5
     });

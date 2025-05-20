@@ -5,6 +5,7 @@ const noteSchema = new mongoose.Schema({
     text: String,
     fileUrl: String,
     filePath: String,
+    fileName: String,
     hasBeenOpened: Boolean,
     openedAt: Date,
     deleteAfterMinutes: Number,
