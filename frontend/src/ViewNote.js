@@ -56,7 +56,12 @@ export default function ViewNote() {
     // delete note from backend on tab close
     useEffect(() => {
     if (!note) return;
-        const before = () => {
+        const before = (e) => {
+            // confirmation to delete tab
+            if (secondsLeft > 0) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
             fetch(`http://localhost:5001/api/notes/${id}`, {
                 method: 'DELETE',
                 keepalive: true,
@@ -64,7 +69,7 @@ export default function ViewNote() {
         };
         window.addEventListener('beforeunload', before);
         return () => window.removeEventListener('beforeunload', before);
-    }, [id, note]);
+    }, [id, note, secondsLeft]);
 
 
     const container = "min-h-screen flex items-center justify-center bg-gray-100 p-6";
@@ -76,7 +81,10 @@ export default function ViewNote() {
         <div className={container}>
             <div className={card}>
             <p className="text-red-500 text-center">{error}</p>
-            <Link to="/" className="block text-indigo-500 hover:underline text-center cursor-pointer">
+            <Link 
+                to="/"
+                className="block text-indigo-500 hover:underline text-center cursor-pointer"
+            >
                 [ Create your own SnapNote ]
             </Link>
             </div>
