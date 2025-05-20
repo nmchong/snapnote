@@ -115,27 +115,29 @@ export default function ViewNote() {
                 </div>
 
 
-                {note.fileUrl && note.fileName && (
+                {note.fileUrl && (
                     <>
                         <a
-                        href={note.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block w-full max-w-md mx-auto px-8 py-3 font-bold text-lg text-center bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-shadow shadow-lg"
+                            href={note.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block w-full max-w-md mx-auto px-8 py-3 font-bold text-lg text-center bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-shadow shadow-lg"
                         >
-                        View attachment: {note.fileName}
+                            View attachment: {
+                                note.filePath.split('_').slice(1).join('_')
+                            }
                         </a>
 
                         {/* file preview */}
                         <div className="mt-6 w-full max-w-md mx-auto">
-                        {/\.(jpe?g|png|gif|webp)$/i.test(note.fileName) && (
+                        {/\.(jpe?g|png|gif|webp)$/i.test(note.filePath) && (
                             <img
                             src={note.fileUrl}
                             alt={note.fileName}
                             className="w-full rounded-lg shadow"
                             />
                         )}
-                        {/\.pdf$/i.test(note.fileName) && (
+                        {/\.pdf$/i.test(note.filePath) && (
                             <iframe
                             src={note.fileUrl}
                             title={note.fileName}
@@ -150,6 +152,14 @@ export default function ViewNote() {
                 <Link
                     to="/"
                     className="block text-center text-gray-500 hover:text-gray-700 hover:underline cursor-pointer"
+                    onClick={async (e) => {
+                        e.preventDefault();
+                        await fetch(`http://localhost:5001/api/notes/${id}`, {
+                        method: 'DELETE',
+                        keepalive: true
+                    });
+                    window.location.href = '/';
+                    }}
                 >[ Create your own SnapNote ]</Link>
             </div>
         </div>

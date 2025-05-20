@@ -19,14 +19,13 @@ const supabase = createClient(
 router.post('/', async (req, res) => {
     const noteId = nanoid(8);
     const { text, fileUrl, filePath, originalFileName, deleteAfterMinutes } = req.body;
-    const fileName = originalFileName;
 
     const note = await Note.create({
         noteId,
         text,
         fileUrl,
         filePath,
-        fileName,
+        fileName: originalFileName,
         hasBeenOpened: false,
         deleteAfterMinutes: deleteAfterMinutes || 5
     });
@@ -54,7 +53,14 @@ router.get('/:id', async (req, res) => {
 
     // send note to frontend
     await note.save();
-    res.json(note);
+    res.json({
+        noteId: note.noteId,
+        text: note.text,
+        fileUrl: note.fileUrl,
+        filePath: note.filePath,
+        fileName: note.fileName,
+        deleteAfterMinutes: note.deleteAfterMinutes,
+    });
 });
 
 
