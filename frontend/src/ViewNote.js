@@ -16,7 +16,7 @@ export default function ViewNote() {
         }
         fetched.current = true;
 
-        fetch(`http://localhost:5001/api/notes/${id}`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/notes/${id}`)
             .then((res) => {
                 if (!res.ok) throw new Error('Note expired or not found');
                 return res.json();
@@ -40,7 +40,7 @@ export default function ViewNote() {
         }
         if (secondsLeft <= 0) {
             setError('Note expired');
-            fetch(`http://localhost:5001/api/notes/${id}`, {
+            fetch(`${process.env.REACT_APP_API_URL}/api/notes/${id}`, {
                 method: "DELETE",
                 keepalive: true
             });
@@ -62,7 +62,7 @@ export default function ViewNote() {
                 e.preventDefault();
                 e.returnValue = '';
             }
-            fetch(`http://localhost:5001/api/notes/${id}`, {
+            fetch(`${process.env.REACT_APP_API_URL}/api/notes/${id}`, {
                 method: 'DELETE',
                 keepalive: true,
             });
@@ -154,13 +154,13 @@ export default function ViewNote() {
                     className="block text-center text-gray-500 hover:text-gray-700 hover:underline cursor-pointer"
                     onClick={async (e) => {
                         e.preventDefault();
-                        await fetch(`http://localhost:5001/api/notes/${id}`, {
+                        await fetch(`${process.env.REACT_APP_API_URL}/api/notes/${id}`, {
                         method: 'DELETE',
                         keepalive: true
                     });
                     window.location.href = '/';
                     }}
-                >[ Create your own SnapNote ]</Link>
+            >[ Create your own SnapNote ]</Link>
             </div>
         </div>
     );
