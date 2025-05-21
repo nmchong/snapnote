@@ -1,3 +1,4 @@
+const supabase = require('../supabaseClient');
 // set up express router
 const express = require('express');
 const router = express.Router();
