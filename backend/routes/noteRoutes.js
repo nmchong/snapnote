@@ -7,14 +7,6 @@ const Note = require('../models/Note');
 const { nanoid } = require('nanoid');
 
 
-// supabase client
-const { createClient } = require('@supabase/supabase-js');
-const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_KEY
-);
-
-
 // route to create a note
 router.post('/', async (req, res) => {
     const noteId = nanoid(8);
@@ -64,6 +56,7 @@ router.get('/:id', async (req, res) => {
 });
 
 
+
 // route to delete file from supabase & delete note
 router.delete('/:id', async (req, res) => {
     const note = await Note.findOne({ noteId: req.params.id })
@@ -86,6 +79,7 @@ router.delete('/:id', async (req, res) => {
     await Note.deleteOne({ noteId: req.params.id });
     return res.json({ success: true });
 });
+
 
 
 // export to router so can be used in main server

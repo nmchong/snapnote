@@ -15,6 +15,7 @@ app.all('*', (req, res) => {
 })
 
 // start server
-app.listen(process.env.PORT || 5001, () => {
-  console.log(`Server listening on port ${process.env.PORT || 5001}`);
-});
+const PORT = process.env.PORT || 5001;
+app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+})
