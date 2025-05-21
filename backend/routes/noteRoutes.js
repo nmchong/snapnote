@@ -4,7 +4,7 @@ const router = express.Router();
 // import mongoose model (db schema)
 const Note = require('../models/Note');
 // use nanoid to generate uuid's
-const { nanoid } = require('nanoid');
+const { nanoid } = require('nanoid/non-secure');
 
 
 // route to create a note
