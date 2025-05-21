@@ -52,7 +52,7 @@ export default function CreateNote() {
         }
 
         // call backend API
-        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/notes/${id}`, {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/notes/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

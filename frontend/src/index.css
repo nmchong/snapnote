@@ -415,7 +415,7 @@
   }
   .file\:rounded-full {
     &::file-selector-button {
-      border-radius: calc(infinity * 1px);
+      border-radius: 9999px;
     }
   }
   .file\:border-0 {
