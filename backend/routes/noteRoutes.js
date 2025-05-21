@@ -3,8 +3,8 @@ const express = require('express');
 const router = express.Router();
 // import mongoose model (db schema)
 const Note = require('../models/Note');
-// use nanoid to generate uuid's
-const { nanoid } = require('nanoid/non-secure');
+// generate uuid's
+const nanoid = () => Math.random().toString(36).substring(2, 10);
 
 
 // route to create a note
