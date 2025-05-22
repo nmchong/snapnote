@@ -43,7 +43,7 @@ npm install
 npm start
 
 # backend setup (in a new terminal)
-cd ../backend
+cd backend
 npm install
 npm start
 ```
