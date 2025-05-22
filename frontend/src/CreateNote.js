@@ -132,10 +132,10 @@ export default function CreateNote() {
             <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">
                 <span role="img" aria-label="pencil">✏️</span> Create a SnapNote</h1>
             <p className="text-center text-gray-600 italic mb-6">
-                A Snapchat-inspired, one-time link generator that self-destructs after viewing.
-                Write text and attach an optional file to be read once. 
-                A note expires after the specified time after being opened or when the note's tab is deleted.
-                All text and files are secure and are deleted immediately after viewing.
+                A Snapchat-inspired, one-time note generator that self-destructs after viewing. 
+                Write text and attach an optional file to be read once.
+                A note expires after the specified time after the link is opened, or when the note's tab is deleted.
+                All text and files are secure and are deleted immediately after viewing. 
             </p>
             
             {error && <p className="text-red-500 mb-4">{error}</p>}
