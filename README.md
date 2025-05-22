@@ -48,11 +48,14 @@ npm install
 npm start
 ```
 ### Environment Variables
-```javascript
-// frontend (frontend/.env)
-REACT_APP_API_URL=https://your-backend-url.up.railway.app
 
-// backend (backend/.env)
+Frontend (frontend/.env)
+```bash
+REACT_APP_API_URL=https://your-backend-url.up.railway.app
+```
+
+Backend (backend/.env)
+```bash
 PORT=5001
 SUPABASE_URL=your_supabase_url
 SUPABASE_SERVICE_KEY=your_supabase_service_key
