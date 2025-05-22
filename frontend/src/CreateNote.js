@@ -134,7 +134,7 @@ export default function CreateNote() {
             <p className="text-center text-gray-600 italic mb-6">
                 A Snapchat-inspired, one-time note generator that self-destructs after viewing. 
                 Write text and attach an optional file to be read once.
-                A note expires after the specified time after the link is opened, or when the note's tab is deleted.
+                A note expires after the specified time after the link is opened, or when the note's tab is closed.
                 All text and files are secure and are deleted immediately after viewing. 
             </p>
             
