@@ -1,4 +1,4 @@
-# SnapNote
+# SnapNote: One-Time Note Generator
 A Snapchat-inspired, one-time link generator that self-destructs after viewing. 
 
 Write text and attach an optional file to be read once. A note expires after the specified time after being opened or when the note's tab is deleted. All text and files are secure and are deleted immediately after viewing. 
