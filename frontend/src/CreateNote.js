@@ -192,17 +192,18 @@ export default function CreateNote() {
                 type="submit"
                 disabled={loading || !text}
                 className={`
-                w-full py-2 text-white font-semibold rounded-lg
-                transition-colors duration-200
-                ${text
-                ? (loading
-                    ? 'bg-indigo-500 cursor-wait'
-                    : 'bg-indigo-600 hover:bg-indigo-700 cursor-pointer')
-                : 'bg-indigo-300 cursor-not-allowed'}
-            `}
+                    w-full py-2 font-semibold rounded-lg transition-colors duration-200
+                    ${loading
+                    ? 'bg-gray-300 text-gray-700 cursor-wait'
+                    : text
+                        ? 'bg-indigo-600 text-white hover:bg-indigo-700 cursor-pointer'
+                        : 'bg-indigo-300 text-white cursor-not-allowed'}
+                `}
             >
                 {loading ? 'Creating…' : 'Create Note'}
             </button>
+
+
             </form>
         </div>
     </div>
