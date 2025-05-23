@@ -1,4 +1,3 @@
-import { track } from '@vercel/analytics';
 import React, { useState } from 'react';
 import { supabase } from './supabaseClient';
 
@@ -14,7 +13,6 @@ export default function CreateNote() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        track('create_note_clicked');
         setError('');
         setLoading(true);
         setCopied(false);

@@ -1,8 +1,11 @@
 import React from 'react';
-import { Analytics } from "@vercel/analytics/react"
+import { inject } from "@vercel/analytics"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CreateNote from './CreateNote';
 import ViewNote from "./ViewNote";
+
+
+inject();
 
 export default function App() {
   return (
@@ -14,7 +17,6 @@ export default function App() {
         {/* view page: one-time note display */}
         <Route path="/notes/:id" element={<ViewNote />} />
 
-        <Analytics />
       </Routes>
     </BrowserRouter>
   );
