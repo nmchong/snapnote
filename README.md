@@ -14,6 +14,14 @@ Full-stack project using the MERN tech stack.
 
 ---
 
+## Features
+- **One-time viewable notes**: text and file entries are deleted after viewing
+- **Auto-expiring notes**: notes expire after a countdown (expiry time set by note creator) or when the user closes the tab
+- **File attachments**: file uploads with smart image/PDF previews
+- **Modern UX**: intuitive UI, copy-to-clipboard, easy navigation
+
+---
+
 ## Live Link & Screenshots
 [https://create-snapnote.vercel.app/](https://create-snapnote.vercel.app/)
 
@@ -23,15 +31,7 @@ Full-stack project using the MERN tech stack.
 
 ---
 
-## Features
-- **One-time viewable notes**: text and file entries are deleted after viewing
-- **Auto-expiring notes**: notes expire after a countdown (expiry time set by note creator) or when the user closes the tab
-- **File attachments**: file uploads with smart image/PDF previews
-- **Modern UX**: intuitive UI, copy-to-clipboard, easy navigation
-
----
-
-## Setup Instructions
+## Setup
 ```bash
 # clone repo
 git clone https://github.com/nmchong/snapnote.git
