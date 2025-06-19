@@ -10,7 +10,7 @@ Full-stack project using the MERN tech stack.
 - **Frontend**: React, Tailwind CSS
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB (note schema), Supabase (file storage)
-- **Deployment**: Vercel (frontend), Railway (backend)
+- **Deployment**: Vercel (frontend), Render (backend)
 
 ---
 
