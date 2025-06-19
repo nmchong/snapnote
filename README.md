@@ -51,7 +51,7 @@ npm start
 
 Frontend (frontend/.env)
 ```bash
-REACT_APP_API_URL=https://your-backend-url.up.railway.app
+REACT_APP_API_URL=your_backend_url
 ```
 
 Backend (backend/.env)
