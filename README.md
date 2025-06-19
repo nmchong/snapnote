@@ -6,7 +6,7 @@ Write text and attach an optional file to be read once. A note expires after the
 ---
 
 ## Technologies
-Full-stack project using the MERN tech stack.
+Full-stack MERN web app.
 - **Frontend**: React, Tailwind CSS
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB (note schema), Supabase (file storage)
