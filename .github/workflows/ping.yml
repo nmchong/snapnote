@@ -1,4 +1,4 @@
-name: Ping Supabase Every 5 Days
+name: Ping Supabase
 
 on:
   schedule:
