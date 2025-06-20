@@ -29,6 +29,13 @@ router.post('/', async (req, res) => {
 
 
 
+// route to ping
+router.get('/ping', (req, res) => {
+    res.status(200).send('pong');
+});
+
+
+
 // route to view a note
 router.get('/:id', async (req, res) => {
     // get note in database by id
@@ -54,12 +61,6 @@ router.get('/:id', async (req, res) => {
         fileName: note.fileName,
         deleteAfterMinutes: note.deleteAfterMinutes,
     });
-});
-
-
-// route to ping
-router.get('/ping', (req, res) => {
-    res.status(200).send('pong');
 });
 
 
