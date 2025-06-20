@@ -83,5 +83,13 @@ router.delete('/:id', async (req, res) => {
 
 
 
+// route to ping
+router.get('/ping', (req, res) => {
+    res.status(200).send('pong');
+});
+
+
+
+
 // export to router so can be used in main server
 module.exports = router;
