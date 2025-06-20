@@ -12,5 +12,5 @@ jobs:
       - name: Curl SnapNote Backend
         run: |
           echo "Pinging backend to keep Supabase alive..."
-          curl -s -w "%{http_code}\n" -o /dev/null https://snapnote-backend-8prh.onrender.com/api/notes/ping
+          curl -s -w "%{http_code}\n" -o /dev/null https://snapnote-backend-8prh.onrender.com/notes/ping
 
