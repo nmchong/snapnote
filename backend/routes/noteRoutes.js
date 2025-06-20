@@ -57,6 +57,12 @@ router.get('/:id', async (req, res) => {
 });
 
 
+// route to ping
+router.get('/ping', (req, res) => {
+    res.status(200).send('pong');
+});
+
+
 
 // route to delete file from supabase & delete note
 router.delete('/:id', async (req, res) => {
@@ -80,14 +86,6 @@ router.delete('/:id', async (req, res) => {
     await Note.deleteOne({ noteId: req.params.id });
     return res.json({ success: true });
 });
-
-
-
-// route to ping
-router.get('/ping', (req, res) => {
-    res.status(200).send('pong');
-});
-
 
 
 
