@@ -12,6 +12,8 @@ Full-stack MERN web app.
 - **Database**: MongoDB (note schema), Supabase (file storage)
 - **Deployment**: Vercel (frontend), Render (backend)
 
+*Note: Render backend has ~1 min startup time after inactivity*
+
 ---
 
 ## Features
