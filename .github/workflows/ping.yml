@@ -13,6 +13,13 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Ping Supabase DB to prevent pause
+        run: |
+          echo "Pinging Supabase DB..."
+          curl -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/keepalive?select=pinged_at&limit=1" \
+            -H "apikey: ${{ secrets.SUPABASE_SERVICE_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_KEY }}"
+
       - name: Upload dummy image to Supabase Storage
         run: |
           echo "Uploading createNote.png to Supabase Storage..."
