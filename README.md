@@ -13,6 +13,7 @@ Full-stack MERN web app.
 - **Deployment**: Vercel (frontend), Render (backend)
 
 *Note: Render backend has ~1 min startup time after inactivity*
+
 *Note: Uploading files no longer works, as Supabase storage becomes inactive after a period of time*
 
 ---
